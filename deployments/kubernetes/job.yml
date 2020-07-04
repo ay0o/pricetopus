@@ -1,0 +1,30 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: pricetopus
+spec:
+  template:
+    spec:
+      containers:
+      - name: pricetopus
+        image: ay0o/pricetopus
+        env:
+        - name: PRICETOPUS_EMAIL_SERVER
+          value: '{{EMAIL_SERVER}}'
+        - name: PRICETOPUS_EMAIL_SERVER_PORT
+          value: '{{EMAIL_SERVER_PORT}}'
+        - name: PRICETOPUS_EMAIL_USER
+          value: '{{EMAIL_USER}}'
+        - name: PRICETOPUS_EMAIL_PASSWORD
+          valueFrom:
+              secretKeyRef:
+                name: pricetopus
+                key: password
+        - name: PRICETOPUS_EMAIL_TO
+          value: '{{EMAIL_DESTINATION}}'
+        - name: PRICETOPUS_PRODUCT_URL
+          value: '{{PRODUCT_URL}}'
+        - name: PRICETOPUS_PRODUCT_PRICE
+          value: '{{PRODUCT_PRICE}}'
+      restartPolicy: Never
+  backoffLimit: 1
